@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="com.sports.portlet.tournament.service.TournamentLocalService" class="com.sports.portlet.tournament.service.impl.TournamentLocalServiceImpl" />
+	<bean id="com.sports.portlet.tournament.service.TournamentService" class="com.sports.portlet.tournament.service.impl.TournamentServiceImpl" />
+	<bean id="com.sports.portlet.tournament.service.persistence.TournamentPersistence" class="com.sports.portlet.tournament.service.persistence.TournamentPersistenceImpl" parent="basePersistence" />
+</beans>
