@@ -5,8 +5,8 @@ This is the <b>Tournament</b> Add Page.
 
 <portlet:actionURL var="editTournamentURL"></portlet:actionURL>
 
-<form action="<%= editTournamentURL %>" name="fm" method="post">
-	<input type="text" name="name"/>
-	<input type="text" name="type" />
-	<input type="submit" value="Save" />
-</form>
+<aui:form action="<%= editTournamentURL %>" name="fm" method="post">
+	<aui:input type="text" name="name"/>
+	<aui:input type="text" name="type" />
+	<aui:button type="submit" value="Save" />
+</aui:form>
