@@ -40,8 +40,38 @@
 			<transient name="primaryKeyObj" />
 		</attributes>
 	</mapped-superclass>
+	<mapped-superclass class="com.sports.portlet.team.model.impl.TeamModelImpl">
+		<attributes>
+			<id name="teamId" />
+			<basic name="tournamentId" />
+			<basic name="companyId" />
+			<basic name="groupId" />
+			<basic name="createdBy" />
+			<basic name="updatedBy" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="name" />
+			<basic name="noOfPlayers" />
+			<basic name="priceMoney" />
+			<basic name="location" />
+			<basic name="sponsors" />
+			<basic name="logo" />
+			<basic name="color" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
 	<entity class="com.sports.portlet.tournament.model.impl.TournamentImpl" name="Tournament">
 		<table name="sports_tournament" />
+		<attributes />
+	</entity>
+	<entity class="com.sports.portlet.team.model.impl.TeamImpl" name="Team">
+		<table name="sports_team" />
 		<attributes />
 	</entity>
 </entity-mappings>

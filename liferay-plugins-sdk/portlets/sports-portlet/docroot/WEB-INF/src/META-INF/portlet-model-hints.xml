@@ -19,4 +19,21 @@
 		<field name="sponsors" type="String" />
 		<field name="logo" type="long" />
 	</model>
+	<model name="com.sports.portlet.team.model.Team">
+		<field name="teamId" type="long" />
+		<field name="tournamentId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createdBy" type="long" />
+		<field name="updatedBy" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="name" type="String" />
+		<field name="noOfPlayers" type="int" />
+		<field name="priceMoney" type="String" />
+		<field name="location" type="String" />
+		<field name="sponsors" type="String" />
+		<field name="logo" type="long" />
+		<field name="color" type="String" />
+	</model>
 </model-hints>

@@ -3,10 +3,11 @@
 
 <hibernate-mapping default-lazy="false" auto-import="false">
 	<import class="com.sports.portlet.tournament.model.Tournament" />
+	<import class="com.sports.portlet.team.model.Team" />
 	<class name="com.sports.portlet.tournament.model.impl.TournamentImpl" table="sports_tournament">
 		<cache usage="read-write" />
 		<id name="tournamentId" type="long">
-			<generator class="identity" />
+			<generator class="assigned" />
 		</id>
 		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
@@ -23,5 +24,25 @@
 		<property name="location" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="sponsors" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="logo" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="com.sports.portlet.team.model.impl.TeamImpl" table="sports_team">
+		<cache usage="read-write" />
+		<id name="teamId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="tournamentId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createdBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="updatedBy" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="noOfPlayers" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="priceMoney" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="location" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="sponsors" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="logo" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="color" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 </hibernate-mapping>

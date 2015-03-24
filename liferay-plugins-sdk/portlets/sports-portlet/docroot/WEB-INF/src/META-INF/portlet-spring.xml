@@ -4,4 +4,7 @@
 	<bean id="com.sports.portlet.tournament.service.TournamentLocalService" class="com.sports.portlet.tournament.service.impl.TournamentLocalServiceImpl" />
 	<bean id="com.sports.portlet.tournament.service.TournamentService" class="com.sports.portlet.tournament.service.impl.TournamentServiceImpl" />
 	<bean id="com.sports.portlet.tournament.service.persistence.TournamentPersistence" class="com.sports.portlet.tournament.service.persistence.TournamentPersistenceImpl" parent="basePersistence" />
+	<bean id="com.sports.portlet.team.service.TeamLocalService" class="com.sports.portlet.team.service.impl.TeamLocalServiceImpl" />
+	<bean id="com.sports.portlet.team.service.TeamService" class="com.sports.portlet.team.service.impl.TeamServiceImpl" />
+	<bean id="com.sports.portlet.team.service.persistence.TeamPersistence" class="com.sports.portlet.team.service.persistence.TeamPersistenceImpl" parent="basePersistence" />
 </beans>

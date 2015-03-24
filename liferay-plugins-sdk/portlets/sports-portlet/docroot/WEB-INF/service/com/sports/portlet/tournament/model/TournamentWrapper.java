@@ -572,7 +572,8 @@ public class TournamentWrapper implements Tournament, ModelWrapper<Tournament> {
 	}
 
 	@Override
-	public int compareTo(Tournament tournament) {
+	public int compareTo(
+		com.sports.portlet.tournament.model.Tournament tournament) {
 		return _tournament.compareTo(tournament);
 	}
 
@@ -582,17 +583,17 @@ public class TournamentWrapper implements Tournament, ModelWrapper<Tournament> {
 	}
 
 	@Override
-	public com.liferay.portal.model.CacheModel<Tournament> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<com.sports.portlet.tournament.model.Tournament> toCacheModel() {
 		return _tournament.toCacheModel();
 	}
 
 	@Override
-	public Tournament toEscapedModel() {
+	public com.sports.portlet.tournament.model.Tournament toEscapedModel() {
 		return new TournamentWrapper(_tournament.toEscapedModel());
 	}
 
 	@Override
-	public Tournament toUnescapedModel() {
+	public com.sports.portlet.tournament.model.Tournament toUnescapedModel() {
 		return new TournamentWrapper(_tournament.toUnescapedModel());
 	}
 
