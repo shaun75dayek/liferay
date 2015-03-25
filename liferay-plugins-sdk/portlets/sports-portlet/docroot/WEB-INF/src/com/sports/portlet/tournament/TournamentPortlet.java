@@ -71,10 +71,8 @@ public class TournamentPortlet extends MVCPortlet {
 			try {
 				editTournament(actionRequest, actionResponse);
 			} catch (PortalException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (SystemException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -132,8 +130,17 @@ public class TournamentPortlet extends MVCPortlet {
 		InputStream inputStream = new FileInputStream(srcfile);
 		String description = "fdsga";
 		long length = srcfile.length();
+		Folder parentfolder = null;
+		try {
+			parentfolder = DLAppLocalServiceUtil.getFolder(groupId, 0, "Tournament");
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+		if(Validator.isNull(parentfolder)) {
+			parentfolder = DLAppLocalServiceUtil.addFolder(userId, groupId, parentFolderId, "Tournament", "Tournament", folderserviceContext);
+		}
 		
-		Folder f= DLAppLocalServiceUtil.addFolder(userId, groupId, parentFolderId, name, description, folderserviceContext);
+		Folder f= DLAppLocalServiceUtil.addFolder(userId, groupId, parentfolder.getFolderId(), name, description, folderserviceContext);
 		long folderId= f.getFolderId();
 		
 		FileEntry fileentry = DLAppLocalServiceUtil.addFileEntry(userId, groupId,

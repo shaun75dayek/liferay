@@ -271,6 +271,17 @@ public class TeamLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static java.util.List<com.sports.portlet.team.model.Team> findByTournamentId(
+		long tournamentId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().findByTournamentId(tournamentId, start, end);
+	}
+
+	public static int countByTournamanetId(long tournamentId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().countByTournamanetId(tournamentId);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

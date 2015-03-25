@@ -8,7 +8,6 @@
 		team  = TeamLocalServiceUtil.fetchTeam(teamId);
 	} else {
 		team = new TeamImpl();
-		team.setTournamentId(tournamentId);
 	}
 %>
 
@@ -19,6 +18,7 @@
 <aui:form action="<%= editTeamURL %>" name="fm" method="post">
 	<aui:model-context bean="<%= team %>" model="<%= Team.class %>" />
 	<aui:input type="hidden" name="teamId"/>
+	<aui:input type="hidden" name="tournamentId" value="<%= tournamentId %>"/>
 	<aui:input type="text" name="name"/>
 	<aui:input type="text" name="color" />
 	<aui:button type="submit" value="Save" />

@@ -12,8 +12,8 @@
 
 <liferay-ui:search-container>
 	<liferay-ui:search-container-results
-		results="<%= TeamLocalServiceUtil.getTeams(searchContainer.getStart(), searchContainer.getEnd()) %>"
-		total="<%= TeamLocalServiceUtil.getTeamsCount() %>"
+		results="<%= TeamLocalServiceUtil.findByTournamentId(tournamentId, searchContainer.getStart(), searchContainer.getEnd()) %>"
+		total="<%= TeamLocalServiceUtil.countByTournamanetId(tournamentId) %>"
 	/>
 
 	<liferay-ui:search-container-row

@@ -1,0 +1,1 @@
+create index IX_91E1703B on sports_team (tournamentId);

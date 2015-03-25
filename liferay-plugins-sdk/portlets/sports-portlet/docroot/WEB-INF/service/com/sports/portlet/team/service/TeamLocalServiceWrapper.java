@@ -280,6 +280,19 @@ public class TeamLocalServiceWrapper implements TeamLocalService,
 		return _teamLocalService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	@Override
+	public java.util.List<com.sports.portlet.team.model.Team> findByTournamentId(
+		long tournamentId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _teamLocalService.findByTournamentId(tournamentId, start, end);
+	}
+
+	@Override
+	public int countByTournamanetId(long tournamentId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _teamLocalService.countByTournamanetId(tournamentId);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

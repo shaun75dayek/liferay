@@ -545,7 +545,7 @@ public class TeamWrapper implements Team, ModelWrapper<Team> {
 	}
 
 	@Override
-	public int compareTo(Team team) {
+	public int compareTo(com.sports.portlet.team.model.Team team) {
 		return _team.compareTo(team);
 	}
 
@@ -555,17 +555,17 @@ public class TeamWrapper implements Team, ModelWrapper<Team> {
 	}
 
 	@Override
-	public com.liferay.portal.model.CacheModel<Team> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<com.sports.portlet.team.model.Team> toCacheModel() {
 		return _team.toCacheModel();
 	}
 
 	@Override
-	public Team toEscapedModel() {
+	public com.sports.portlet.team.model.Team toEscapedModel() {
 		return new TeamWrapper(_team.toEscapedModel());
 	}
 
 	@Override
-	public Team toUnescapedModel() {
+	public com.sports.portlet.team.model.Team toUnescapedModel() {
 		return new TeamWrapper(_team.toUnescapedModel());
 	}
 

@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.dao.orm.Query;
+import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -30,6 +31,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
@@ -80,6 +82,502 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
 			TeamModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_TOURNAMANETID =
+		new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
+			TeamModelImpl.FINDER_CACHE_ENABLED, TeamImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByTournamanetId",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TOURNAMANETID =
+		new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
+			TeamModelImpl.FINDER_CACHE_ENABLED, TeamImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByTournamanetId",
+			new String[] { Long.class.getName() },
+			TeamModelImpl.TOURNAMENTID_COLUMN_BITMASK |
+			TeamModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_TOURNAMANETID = new FinderPath(TeamModelImpl.ENTITY_CACHE_ENABLED,
+			TeamModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByTournamanetId",
+			new String[] { Long.class.getName() });
+
+	/**
+	 * Returns all the teams where tournamentId = &#63;.
+	 *
+	 * @param tournamentId the tournament ID
+	 * @return the matching teams
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Team> findByTournamanetId(long tournamentId)
+		throws SystemException {
+		return findByTournamanetId(tournamentId, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the teams where tournamentId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.sports.portlet.team.model.impl.TeamModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param tournamentId the tournament ID
+	 * @param start the lower bound of the range of teams
+	 * @param end the upper bound of the range of teams (not inclusive)
+	 * @return the range of matching teams
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Team> findByTournamanetId(long tournamentId, int start, int end)
+		throws SystemException {
+		return findByTournamanetId(tournamentId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the teams where tournamentId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.sports.portlet.team.model.impl.TeamModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param tournamentId the tournament ID
+	 * @param start the lower bound of the range of teams
+	 * @param end the upper bound of the range of teams (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching teams
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Team> findByTournamanetId(long tournamentId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TOURNAMANETID;
+			finderArgs = new Object[] { tournamentId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_TOURNAMANETID;
+			finderArgs = new Object[] {
+					tournamentId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<Team> list = (List<Team>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Team team : list) {
+				if ((tournamentId != team.getTournamentId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_TEAM_WHERE);
+
+			query.append(_FINDER_COLUMN_TOURNAMANETID_TOURNAMENTID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(TeamModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(tournamentId);
+
+				if (!pagination) {
+					list = (List<Team>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<Team>(list);
+				}
+				else {
+					list = (List<Team>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first team in the ordered set where tournamentId = &#63;.
+	 *
+	 * @param tournamentId the tournament ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching team
+	 * @throws com.sports.portlet.team.NoSuchTeamException if a matching team could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Team findByTournamanetId_First(long tournamentId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTeamException, SystemException {
+		Team team = fetchByTournamanetId_First(tournamentId, orderByComparator);
+
+		if (team != null) {
+			return team;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("tournamentId=");
+		msg.append(tournamentId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTeamException(msg.toString());
+	}
+
+	/**
+	 * Returns the first team in the ordered set where tournamentId = &#63;.
+	 *
+	 * @param tournamentId the tournament ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching team, or <code>null</code> if a matching team could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Team fetchByTournamanetId_First(long tournamentId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<Team> list = findByTournamanetId(tournamentId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last team in the ordered set where tournamentId = &#63;.
+	 *
+	 * @param tournamentId the tournament ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching team
+	 * @throws com.sports.portlet.team.NoSuchTeamException if a matching team could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Team findByTournamanetId_Last(long tournamentId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTeamException, SystemException {
+		Team team = fetchByTournamanetId_Last(tournamentId, orderByComparator);
+
+		if (team != null) {
+			return team;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("tournamentId=");
+		msg.append(tournamentId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTeamException(msg.toString());
+	}
+
+	/**
+	 * Returns the last team in the ordered set where tournamentId = &#63;.
+	 *
+	 * @param tournamentId the tournament ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching team, or <code>null</code> if a matching team could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Team fetchByTournamanetId_Last(long tournamentId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByTournamanetId(tournamentId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Team> list = findByTournamanetId(tournamentId, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the teams before and after the current team in the ordered set where tournamentId = &#63;.
+	 *
+	 * @param teamId the primary key of the current team
+	 * @param tournamentId the tournament ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next team
+	 * @throws com.sports.portlet.team.NoSuchTeamException if a team with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Team[] findByTournamanetId_PrevAndNext(long teamId,
+		long tournamentId, OrderByComparator orderByComparator)
+		throws NoSuchTeamException, SystemException {
+		Team team = findByPrimaryKey(teamId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Team[] array = new TeamImpl[3];
+
+			array[0] = getByTournamanetId_PrevAndNext(session, team,
+					tournamentId, orderByComparator, true);
+
+			array[1] = team;
+
+			array[2] = getByTournamanetId_PrevAndNext(session, team,
+					tournamentId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Team getByTournamanetId_PrevAndNext(Session session, Team team,
+		long tournamentId, OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_TEAM_WHERE);
+
+		query.append(_FINDER_COLUMN_TOURNAMANETID_TOURNAMENTID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(TeamModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(tournamentId);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(team);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<Team> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the teams where tournamentId = &#63; from the database.
+	 *
+	 * @param tournamentId the tournament ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public void removeByTournamanetId(long tournamentId)
+		throws SystemException {
+		for (Team team : findByTournamanetId(tournamentId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(team);
+		}
+	}
+
+	/**
+	 * Returns the number of teams where tournamentId = &#63;.
+	 *
+	 * @param tournamentId the tournament ID
+	 * @return the number of matching teams
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByTournamanetId(long tournamentId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_TOURNAMANETID;
+
+		Object[] finderArgs = new Object[] { tournamentId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_TEAM_WHERE);
+
+			query.append(_FINDER_COLUMN_TOURNAMANETID_TOURNAMENTID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(tournamentId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_TOURNAMANETID_TOURNAMENTID_2 = "team.tournamentId = ?";
 
 	public TeamPersistenceImpl() {
 		setModelClass(Team.class);
@@ -270,6 +768,8 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 
 		boolean isNew = team.isNew();
 
+		TeamModelImpl teamModelImpl = (TeamModelImpl)team;
+
 		Session session = null;
 
 		try {
@@ -293,8 +793,29 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
-		if (isNew) {
+		if (isNew || !TeamModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((teamModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TOURNAMANETID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						teamModelImpl.getOriginalTournamentId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TOURNAMANETID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TOURNAMANETID,
+					args);
+
+				args = new Object[] { teamModelImpl.getTournamentId() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_TOURNAMANETID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_TOURNAMANETID,
+					args);
+			}
 		}
 
 		EntityCacheUtil.putResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
@@ -635,9 +1156,12 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 	}
 
 	private static final String _SQL_SELECT_TEAM = "SELECT team FROM Team team";
+	private static final String _SQL_SELECT_TEAM_WHERE = "SELECT team FROM Team team WHERE ";
 	private static final String _SQL_COUNT_TEAM = "SELECT COUNT(team) FROM Team team";
+	private static final String _SQL_COUNT_TEAM_WHERE = "SELECT COUNT(team) FROM Team team WHERE ";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "team.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Team exists with the primary key ";
+	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Team exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(TeamPersistenceImpl.class);

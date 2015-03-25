@@ -93,7 +93,11 @@ public class TeamModelImpl extends BaseModelImpl<Team> implements TeamModel {
 	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.finder.cache.enabled.com.sports.portlet.team.model.Team"),
 			true);
-	public static final boolean COLUMN_BITMASK_ENABLED = false;
+	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.column.bitmask.enabled.com.sports.portlet.team.model.Team"),
+			true);
+	public static long TOURNAMENTID_COLUMN_BITMASK = 1L;
+	public static long MODIFIEDDATE_COLUMN_BITMASK = 2L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -318,7 +322,19 @@ public class TeamModelImpl extends BaseModelImpl<Team> implements TeamModel {
 
 	@Override
 	public void setTournamentId(long tournamentId) {
+		_columnBitmask |= TOURNAMENTID_COLUMN_BITMASK;
+
+		if (!_setOriginalTournamentId) {
+			_setOriginalTournamentId = true;
+
+			_originalTournamentId = _tournamentId;
+		}
+
 		_tournamentId = tournamentId;
+	}
+
+	public long getOriginalTournamentId() {
+		return _originalTournamentId;
 	}
 
 	@JSON
@@ -384,6 +400,8 @@ public class TeamModelImpl extends BaseModelImpl<Team> implements TeamModel {
 
 	@Override
 	public void setModifiedDate(Date modifiedDate) {
+		_columnBitmask = -1L;
+
 		_modifiedDate = modifiedDate;
 	}
 
@@ -489,6 +507,10 @@ public class TeamModelImpl extends BaseModelImpl<Team> implements TeamModel {
 		_color = color;
 	}
 
+	public long getColumnBitmask() {
+		return _columnBitmask;
+	}
+
 	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
@@ -581,6 +603,13 @@ public class TeamModelImpl extends BaseModelImpl<Team> implements TeamModel {
 
 	@Override
 	public void resetOriginalValues() {
+		TeamModelImpl teamModelImpl = this;
+
+		teamModelImpl._originalTournamentId = teamModelImpl._tournamentId;
+
+		teamModelImpl._setOriginalTournamentId = false;
+
+		teamModelImpl._columnBitmask = 0;
 	}
 
 	@Override
@@ -781,6 +810,8 @@ public class TeamModelImpl extends BaseModelImpl<Team> implements TeamModel {
 	private static Class<?>[] _escapedModelInterfaces = new Class[] { Team.class };
 	private long _teamId;
 	private long _tournamentId;
+	private long _originalTournamentId;
+	private boolean _setOriginalTournamentId;
 	private long _companyId;
 	private long _groupId;
 	private long _createdBy;
@@ -794,5 +825,6 @@ public class TeamModelImpl extends BaseModelImpl<Team> implements TeamModel {
 	private String _sponsors;
 	private long _logo;
 	private String _color;
+	private long _columnBitmask;
 	private Team _escapedModel;
 }

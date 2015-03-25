@@ -113,6 +113,14 @@ public class TeamLocalServiceClpInvoker {
 		_methodName35 = "setBeanIdentifier";
 
 		_methodParameterTypes35 = new String[] { "java.lang.String" };
+
+		_methodName40 = "findByTournamentId";
+
+		_methodParameterTypes40 = new String[] { "long", "int", "int" };
+
+		_methodName41 = "countByTournamanetId";
+
+		_methodParameterTypes41 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -216,6 +224,18 @@ public class TeamLocalServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName40.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes40, parameterTypes)) {
+			return TeamLocalServiceUtil.findByTournamentId(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue(),
+				((Integer)arguments[2]).intValue());
+		}
+
+		if (_methodName41.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes41, parameterTypes)) {
+			return TeamLocalServiceUtil.countByTournamanetId(((Long)arguments[0]).longValue());
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -255,4 +275,8 @@ public class TeamLocalServiceClpInvoker {
 	private String[] _methodParameterTypes34;
 	private String _methodName35;
 	private String[] _methodParameterTypes35;
+	private String _methodName40;
+	private String[] _methodParameterTypes40;
+	private String _methodName41;
+	private String[] _methodParameterTypes41;
 }

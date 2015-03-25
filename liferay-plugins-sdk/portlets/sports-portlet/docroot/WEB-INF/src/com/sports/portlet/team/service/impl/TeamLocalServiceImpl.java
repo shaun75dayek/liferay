@@ -14,7 +14,11 @@
 
 package com.sports.portlet.team.service.impl;
 
+import com.liferay.portal.kernel.exception.SystemException;
+import com.sports.portlet.team.model.Team;
 import com.sports.portlet.team.service.base.TeamLocalServiceBaseImpl;
+
+import java.util.List;
 
 /**
  * The implementation of the team local service.
@@ -31,9 +35,11 @@ import com.sports.portlet.team.service.base.TeamLocalServiceBaseImpl;
  * @see com.sports.portlet.team.service.TeamLocalServiceUtil
  */
 public class TeamLocalServiceImpl extends TeamLocalServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link com.sports.portlet.team.service.TeamLocalServiceUtil} to access the team local service.
-	 */
+	public List<Team> findByTournamentId(long tournamentId, int start, int end) throws SystemException {
+		return teamPersistence.findByTournamanetId(tournamentId, start, end);
+	}
+	
+	public int countByTournamanetId(long tournamentId) throws SystemException {
+		return teamPersistence.countByTournamanetId(tournamentId);
+	}
 }
