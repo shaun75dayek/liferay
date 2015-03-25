@@ -3,10 +3,20 @@ package com.sports.portlet.tournament;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.documentlibrary.model.DLFolder;
+import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
+import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.sports.portlet.team.model.Team;
 import com.sports.portlet.team.model.impl.TeamImpl;
@@ -15,7 +25,11 @@ import com.sports.portlet.tournament.model.Tournament;
 import com.sports.portlet.tournament.model.impl.TournamentImpl;
 import com.sports.portlet.tournament.service.TournamentLocalServiceUtil;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.portlet.ActionRequest;
@@ -31,6 +45,9 @@ import javax.portlet.ResourceResponse;
  */
 public class TournamentPortlet extends MVCPortlet {
 
+	private final static String fileInputName = "logo1";
+	long parentFolderId = DLFolderConstants.DEFAULT_PARENT_FOLDER_ID;
+	
 	@Override
 	public void doView(RenderRequest renderRequest,
 			RenderResponse renderResponse) throws IOException, PortletException {
@@ -51,7 +68,15 @@ public class TournamentPortlet extends MVCPortlet {
 				editTeam(actionRequest, actionResponse);
 			}
 		} else {
-			editTournament(actionRequest, actionResponse);
+			try {
+				editTournament(actionRequest, actionResponse);
+			} catch (PortalException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SystemException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -64,9 +89,15 @@ public class TournamentPortlet extends MVCPortlet {
 	}
  
 	public void editTournament(ActionRequest actionRequest,
-			ActionResponse actionResponse) throws IOException, PortletException {
-		long tournamentId = ParamUtil.getLong(actionRequest, "tournamentId");
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+			ActionResponse actionResponse) throws IOException, PortletException, PortalException, SystemException {
+		
+		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
+		System.out.println("called");
+		long tournamentId = ParamUtil.getLong(uploadPortletRequest, "tournamentId");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("mmddyyyy");
+		Date startDate = ParamUtil.getDate(uploadPortletRequest, "startDate", dateFormat);
+		Date endDate = ParamUtil.getDate(uploadPortletRequest, "endDate", dateFormat);
+		ThemeDisplay themeDisplay = (ThemeDisplay) uploadPortletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		Tournament tournament = null;
 		if(Validator.isNotNull(tournamentId)) {
 			try {
@@ -82,13 +113,36 @@ public class TournamentPortlet extends MVCPortlet {
 			tournament.setCreatedBy(themeDisplay.getUserId());
 		}
 		
-		String name = ParamUtil.getString(actionRequest, "name");
-		String type = ParamUtil.getString(actionRequest, "type");
+		String name = ParamUtil.getString(uploadPortletRequest, "name");
+		String type = ParamUtil.getString(uploadPortletRequest, "type");
+		tournament.setStartDate(startDate);
+		tournament.setEndDate(endDate);
 		tournament.setName(name);
 		tournament.setType(type);
 		tournament.setModifiedDate(new Date());
 		tournament.setUpdatedBy(themeDisplay.getUserId());
 		
+		long groupId = themeDisplay.getScopeGroupId();
+		long companyId = themeDisplay.getCompanyId();
+		long userId = themeDisplay.getUserId();
+		File srcfile = uploadPortletRequest.getFile("logo1");
+		String contentType = MimeTypesUtil.getContentType(srcfile);
+		ServiceContext folderserviceContext = ServiceContextFactory
+				.getInstance(DLFolder.class.getName(), uploadPortletRequest);
+		InputStream inputStream = new FileInputStream(srcfile);
+		String description = "fdsga";
+		long length = srcfile.length();
+		
+		Folder f= DLAppLocalServiceUtil.addFolder(userId, groupId, parentFolderId, name, description, folderserviceContext);
+		long folderId= f.getFolderId();
+		
+		FileEntry fileentry = DLAppLocalServiceUtil.addFileEntry(userId, groupId,
+				folderId, srcfile.getName(), contentType, "fjd",
+				"dkjfhals", "changeLog", inputStream, length,
+				folderserviceContext);
+		
+		long logoId = fileentry.getFileEntryId();
+		tournament.setLogo(logoId);
 		if(Validator.isNotNull(tournamentId)) {
 			try {
 				TournamentLocalServiceUtil.updateTournament(tournament);
@@ -99,6 +153,7 @@ public class TournamentPortlet extends MVCPortlet {
 			try {
 				tournamentId = CounterLocalServiceUtil.increment(Tournament.class.getName());
 				tournament.setTournamentId(tournamentId);
+				
 				TournamentLocalServiceUtil.addTournament(tournament);
 			} catch (SystemException e1) {
 				e1.printStackTrace();
