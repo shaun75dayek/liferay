@@ -282,6 +282,23 @@ public class TeamLocalServiceUtil {
 		return getService().countByTournamanetId(tournamentId);
 	}
 
+	public static java.util.List<com.sports.portlet.team.model.Team> fetchTeamCustomList(
+		int begin, int end) {
+		return getService().fetchTeamCustomList(begin, end);
+	}
+
+	public static java.util.List<com.sports.portlet.team.model.Team> fetchTeamByTournamentIdCustomList(
+		long tournamentId, int begin, int end) {
+		return getService()
+				   .fetchTeamByTournamentIdCustomList(tournamentId, begin, end);
+	}
+
+	public static java.util.List<com.sports.portlet.team.model.Team> fetchTeamByTournamentIdDynamicList(
+		long tournamentId, int begin, int end) {
+		return getService()
+				   .fetchTeamByTournamentIdDynamicList(tournamentId, begin, end);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

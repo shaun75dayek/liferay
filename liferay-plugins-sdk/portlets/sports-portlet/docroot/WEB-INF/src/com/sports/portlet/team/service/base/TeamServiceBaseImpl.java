@@ -24,6 +24,7 @@ import com.liferay.portal.service.persistence.UserPersistence;
 
 import com.sports.portlet.team.model.Team;
 import com.sports.portlet.team.service.TeamService;
+import com.sports.portlet.team.service.persistence.TeamFinder;
 import com.sports.portlet.team.service.persistence.TeamPersistence;
 
 import javax.sql.DataSource;
@@ -102,6 +103,24 @@ public abstract class TeamServiceBaseImpl extends BaseServiceImpl
 	 */
 	public void setTeamPersistence(TeamPersistence teamPersistence) {
 		this.teamPersistence = teamPersistence;
+	}
+
+	/**
+	 * Returns the team finder.
+	 *
+	 * @return the team finder
+	 */
+	public TeamFinder getTeamFinder() {
+		return teamFinder;
+	}
+
+	/**
+	 * Sets the team finder.
+	 *
+	 * @param teamFinder the team finder
+	 */
+	public void setTeamFinder(TeamFinder teamFinder) {
+		this.teamFinder = teamFinder;
 	}
 
 	/**
@@ -281,6 +300,8 @@ public abstract class TeamServiceBaseImpl extends BaseServiceImpl
 	protected com.sports.portlet.team.service.TeamService teamService;
 	@BeanReference(type = TeamPersistence.class)
 	protected TeamPersistence teamPersistence;
+	@BeanReference(type = TeamFinder.class)
+	protected TeamFinder teamFinder;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.service.ResourceLocalService.class)

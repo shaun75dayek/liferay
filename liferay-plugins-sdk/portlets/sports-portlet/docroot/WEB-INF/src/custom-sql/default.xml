@@ -1,0 +1,9 @@
+<custom-sql>
+    <sql id="team-list">
+    	SELECT * FROM sports_team order by modifiedDate asc
+    </sql>
+    
+     <sql id="team-list-by-touranamentId">
+    	SELECT * FROM sports_team where tournamentId = ? order by modifiedDate asc
+    </sql>
+</custom-sql>

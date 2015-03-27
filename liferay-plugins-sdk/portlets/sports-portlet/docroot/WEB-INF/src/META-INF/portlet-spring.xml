@@ -7,4 +7,5 @@
 	<bean id="com.sports.portlet.team.service.TeamLocalService" class="com.sports.portlet.team.service.impl.TeamLocalServiceImpl" />
 	<bean id="com.sports.portlet.team.service.TeamService" class="com.sports.portlet.team.service.impl.TeamServiceImpl" />
 	<bean id="com.sports.portlet.team.service.persistence.TeamPersistence" class="com.sports.portlet.team.service.persistence.TeamPersistenceImpl" parent="basePersistence" />
+	<bean id="com.sports.portlet.team.service.persistence.TeamFinder" class="com.sports.portlet.team.service.persistence.TeamFinderImpl" parent="basePersistence" />
 </beans>

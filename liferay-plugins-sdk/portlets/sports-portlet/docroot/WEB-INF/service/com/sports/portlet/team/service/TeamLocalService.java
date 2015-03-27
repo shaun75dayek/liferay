@@ -251,4 +251,16 @@ public interface TeamLocalService extends BaseLocalService, InvokableLocalServic
 
 	public int countByTournamanetId(long tournamentId)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.sports.portlet.team.model.Team> fetchTeamCustomList(
+		int begin, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.sports.portlet.team.model.Team> fetchTeamByTournamentIdCustomList(
+		long tournamentId, int begin, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.sports.portlet.team.model.Team> fetchTeamByTournamentIdDynamicList(
+		long tournamentId, int begin, int end);
 }

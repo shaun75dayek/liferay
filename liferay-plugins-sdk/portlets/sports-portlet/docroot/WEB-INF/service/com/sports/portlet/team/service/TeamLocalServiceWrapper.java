@@ -293,6 +293,26 @@ public class TeamLocalServiceWrapper implements TeamLocalService,
 		return _teamLocalService.countByTournamanetId(tournamentId);
 	}
 
+	@Override
+	public java.util.List<com.sports.portlet.team.model.Team> fetchTeamCustomList(
+		int begin, int end) {
+		return _teamLocalService.fetchTeamCustomList(begin, end);
+	}
+
+	@Override
+	public java.util.List<com.sports.portlet.team.model.Team> fetchTeamByTournamentIdCustomList(
+		long tournamentId, int begin, int end) {
+		return _teamLocalService.fetchTeamByTournamentIdCustomList(tournamentId,
+			begin, end);
+	}
+
+	@Override
+	public java.util.List<com.sports.portlet.team.model.Team> fetchTeamByTournamentIdDynamicList(
+		long tournamentId, int begin, int end) {
+		return _teamLocalService.fetchTeamByTournamentIdDynamicList(tournamentId,
+			begin, end);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

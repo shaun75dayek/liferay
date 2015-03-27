@@ -121,6 +121,18 @@ public class TeamLocalServiceClp implements TeamLocalService {
 		_methodName20 = "countByTournamanetId";
 
 		_methodParameterTypes20 = new String[] { "long" };
+
+		_methodName21 = "fetchTeamCustomList";
+
+		_methodParameterTypes21 = new String[] { "int", "int" };
+
+		_methodName22 = "fetchTeamByTournamentIdCustomList";
+
+		_methodParameterTypes22 = new String[] { "long", "int", "int" };
+
+		_methodName23 = "fetchTeamByTournamentIdDynamicList";
+
+		_methodParameterTypes23 = new String[] { "long", "int", "int" };
 	}
 
 	@Override
@@ -727,6 +739,80 @@ public class TeamLocalServiceClp implements TeamLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
+	public java.util.List<com.sports.portlet.team.model.Team> fetchTeamCustomList(
+		int begin, int end) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName21,
+					_methodParameterTypes21, new Object[] { begin, end });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.sports.portlet.team.model.Team>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<com.sports.portlet.team.model.Team> fetchTeamByTournamentIdCustomList(
+		long tournamentId, int begin, int end) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName22,
+					_methodParameterTypes22,
+					new Object[] { tournamentId, begin, end });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.sports.portlet.team.model.Team>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<com.sports.portlet.team.model.Team> fetchTeamByTournamentIdDynamicList(
+		long tournamentId, int begin, int end) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23,
+					new Object[] { tournamentId, begin, end });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.sports.portlet.team.model.Team>)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -768,4 +854,10 @@ public class TeamLocalServiceClp implements TeamLocalService {
 	private String[] _methodParameterTypes19;
 	private String _methodName20;
 	private String[] _methodParameterTypes20;
+	private String _methodName21;
+	private String[] _methodParameterTypes21;
+	private String _methodName22;
+	private String[] _methodParameterTypes22;
+	private String _methodName23;
+	private String[] _methodParameterTypes23;
 }

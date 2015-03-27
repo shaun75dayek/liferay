@@ -14,7 +14,12 @@
 
 package com.sports.portlet.team.service.impl;
 
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
+import com.liferay.portal.service.TeamLocalServiceUtil;
 import com.sports.portlet.team.model.Team;
 import com.sports.portlet.team.service.base.TeamLocalServiceBaseImpl;
 
@@ -41,5 +46,25 @@ public class TeamLocalServiceImpl extends TeamLocalServiceBaseImpl {
 	
 	public int countByTournamanetId(long tournamentId) throws SystemException {
 		return teamPersistence.countByTournamanetId(tournamentId);
+	}
+	
+	public List<Team> fetchTeamCustomList(int begin, int end) {
+		return teamFinder.fetchTeamCustomList(begin, end);
+	}
+	
+	public List<Team> fetchTeamByTournamentIdCustomList(long tournamentId, int begin, int end) {
+		return teamFinder.fetchTeamByTournamentIdCustomList(tournamentId, begin, end);
+	}
+	
+	public List<Team> fetchTeamByTournamentIdDynamicList(long tournamentId, int begin, int end) {
+		 DynamicQuery teamQuery = DynamicQueryFactoryUtil.forClass(Team.class);
+		 teamQuery.add(PropertyFactoryUtil.forName("tournamentId ").eq(tournamentId));
+		 List<Team> studentList = null;
+		try {
+			studentList = TeamLocalServiceUtil.dynamicQuery(teamQuery, begin, end);
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		 return studentList;
 	}
 }
