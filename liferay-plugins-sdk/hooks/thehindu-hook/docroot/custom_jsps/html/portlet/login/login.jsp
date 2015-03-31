@@ -15,7 +15,6 @@
 --%>
 
 <%@ include file="/html/portlet/login/init.jsp" %>
-Hi I modified the login jsp file.
 <c:choose>
 	<c:when test="<%= themeDisplay.isSignedIn() %>">
 
